@@ -8,5 +8,5 @@ http.createServer((req, res) => {
     ?? routes?.[req.method]?.default
     ?? routes.default;
 
-  return route(req, res);
-}).listen(HTTP_SERVER.PORT)
+  route(req, res);
+}).listen(HTTP_SERVER.PORT);

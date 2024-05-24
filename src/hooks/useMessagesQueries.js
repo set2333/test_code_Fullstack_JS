@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { HTTP_SERVER, WS_SERVER } from './consts.js';
+import { HTTP_SERVER, WS_SERVER } from '../consts.js';
 
 export const useMessagesQueries = (dispatch) => {
   const queryClient = useQueryClient();

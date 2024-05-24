@@ -1,32 +1,21 @@
-import { useRef, useReducer, useCallback } from 'react';
+import { useRef, useReducer } from 'react';
 import { reducer } from './reducer.js';
-import { useMessagesQueries } from'./useMessagesQueries.js';
-import { HTTP_SERVER } from './consts.js';
+import { useAddMessageQuery } from'./hooks/useAddMessageQuery.js';
+import { useMessagesQueries } from'./hooks/useMessagesQueries.js';
 
 const App = () => {
   const ref = useRef(null);
   const [messages, dispatch] = useReducer(reducer);
+  const addMessage = useAddMessageQuery(ref);
   useMessagesQueries(dispatch);
-
-  const handleSend = useCallback(() => {
-    fetch(`${HTTP_SERVER.PROTOCOL}://${HTTP_SERVER.HOST}:${HTTP_SERVER.PORT}/addMessage`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify({ message: ref.current.value }),
-    });
-    ref.current.focus();
-    ref.current.value = '';
-  }, [ref]);
 
   return (
     <div>
       <input
         ref={ref}
-        onKeyUp={({ key }) => key === 'Enter' && handleSend()}
+        onKeyUp={({ key }) => key === 'Enter' && addMessage()}
       />
-      <button onClick={handleSend}>Send</button>
+      <button onClick={addMessage}>Send</button>
       <ul>
         {messages?.map(({ id, message }) => <li key={id}>{message}</li>)}
       </ul>
