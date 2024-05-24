@@ -1,10 +1,9 @@
-import { useState, useRef, useReducer, useCallback } from 'react';
+import { useRef, useReducer, useCallback } from 'react';
 import { reducer } from './reducer.js';
 import { useMessagesQueries } from'./useMessagesQueries.js';
 import { HTTP_SERVER } from './consts.js';
 
 const App = () => {
-  const [message, setMessage] = useState('');
   const ref = useRef(null);
   const [messages, dispatch] = useReducer(reducer);
   useMessagesQueries(dispatch);
@@ -15,18 +14,16 @@ const App = () => {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message: ref.current.value }),
     });
-    setMessage('');
     ref.current.focus();
-  }, [ref, setMessage, message]);  
+    ref.current.value = '';
+  }, [ref]);
 
   return (
     <div>
       <input
         ref={ref}
-        value={message}
-        onChange={({ target: { value }}) => setMessage(value)}
         onKeyUp={({ key }) => key === 'Enter' && handleSend()}
       />
       <button onClick={handleSend}>Send</button>

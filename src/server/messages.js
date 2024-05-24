@@ -2,8 +2,7 @@ export default class Messages {
   constructor(size, actions) {
     this.size = size;
     this.messages = [];
-    this.onAdded = actions.onAdded;
-    this.onRemoved = actions.onRemoved;
+    this.actions = actions;
   }
 
   getMessages() {
@@ -13,11 +12,11 @@ export default class Messages {
   addMessage(message) {
     if (this.messages.length >= this.size) {
       const removedMessage = this.messages.shift();
-      this.onRemoved(removedMessage);
+      this.actions.onRemoved(removedMessage);
     }
 
     const messageWithId = { id: Date.now(), message };
     this.messages.push(messageWithId);
-    this.onAdded(messageWithId);
+    this.actions.onAdded(messageWithId);
   }
 };
